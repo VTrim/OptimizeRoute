@@ -1,0 +1,112 @@
+<!DOCTYPE HTML>
+<html>
+ <head>
+  <meta charset="utf-8">
+  <title>Маршрут</title>
+  
+  <link href="css/jquery.formstyler.css" rel="stylesheet" />
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  <script src="css/jquery.formstyler.min.js"></script>
+  <script>
+  (function($) {
+  $(function() {
+
+  $('input, select, button').styler();
+
+  });
+  })(jQuery);
+  </script>
+ </head>
+ <body>
+ 
+ <center> 
+ <img src="css/map.png">
+ <big>
+ <h3>
+ <div style="color: green" id="result"></div>
+ <p>Оберіть маршрут</p>
+   <p>З міста <select onchange="selectSource(this.selectedIndex);" id="source">
+    <option value="A" selected>A</option>
+    <option value="B">B</option>
+    <option value="C">C</option>
+    <option value="D">D</option>
+	<option value="E">E</option>
+	<option value="F">F</option>
+   </select>
+   
+     в місто <select onchange="selectTarget(this.selectedIndex);" id="target">
+    <option value="A">A</option>
+    <option value="B">B</option>
+    <option value="C">C</option>
+    <option value="D">D</option>
+	<option value="E">E</option>
+	<option value="F" selected>F</option>
+   </select>
+   
+<form>
+<b>За</b>
+    <input id="sort" name="sort" type="radio" onchange="selectParam(this.value)" value="time" checked> часом 
+<input id="sort" name="sort" type="radio" onchange="selectParam(this.value)" value="distance">  відстанню
+</form>
+<br>
+   <input class="styler" type="button" onclick="optimizeRoute()" value="Знайти оптимальний маршрут">
+
+
+   </p>
+  </big>
+  </h3>
+  </center>
+  
+    <script>
+	
+	source = 'A';
+	target = 'F';
+	param = 'time';
+  
+  function selectSource(id){
+  
+  var s = document.getElementById("source").options;
+    source = s[id].value;
+  
+  }
+  
+    function selectTarget(id){
+  
+  var t = document.getElementById("target").options;
+    target = t[id].value;
+  
+  }
+  
+      function selectParam(value){
+  
+    param = value;
+  
+  }
+  
+  
+  function optimizeRoute() {
+
+    var request = new XMLHttpRequest(); 
+    request.open("POST", "script.php", true); 
+    request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    request.send("param="+param+"&source="+source+"&target="+target);
+    request.onreadystatechange = function() {
+ 
+      if (request.readyState == 4) 
+      {
+         if(request.status == 200) 
+         {
+
+         document.getElementById("result").innerHTML = request.responseText;
+
+         }
+      }
+    };
+
+}
+
+  
+  </script>
+
+ </body>
+</html>
